@@ -277,8 +277,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <option>Data Engineering</option>
         <option>Software Testing</option>
         <option>Java / .NET</option>
-        <option>Leadership</option>
+        <option>ERP / D365</option>
+        <option>ERP / Oracle</option>
+        <option>Salesforce / CRM</option>
+        <option>ServiceNow / ITSM</option>
+        <option>Cybersecurity</option>
+        <option>Microsoft 365</option>
+        <option>Mainframe / Legacy</option>
+        <option>DevOps</option>
         <option>Agile / Scrum</option>
+        <option>Leadership / Soft Skills</option>
+        <option>Quality / Manufacturing</option>
       </select>
     </div>
     <button class="btn-primary btn-sm" onclick="showView('upload',document.querySelectorAll('.nav-btn')[2])">+ Add Trainer</button>
@@ -361,152 +370,38 @@ let state = {
   lastSynced: null
 };
 
-// ─── SEED DATA (from Drive profiles we already read) ──────────────────────────
+// ─── SEED DATA — All 30 trainers from OI Master Trainer Profile Database (Drive) ──
 const SEED_TRAINERS = [
-  {
-    id:'t1', name:'Maruti Makwana', status:'approved',
-    headline:'Agentic AI & Azure Expert | 300+ Microsoft Batches',
-    avatar:'MM',
-    avatarColor:'linear-gradient(135deg,#4338ca,#7c3aed)',
-    specializations:['Agentic AI','LLMs','Azure AI Foundry','Prompt Engineering','RAG','AutoGen','LangChain'],
-    domains:['AI / GenAI','Cloud / Azure'],
-    totalExpYears:12, corporateTrainingYears:8, corporateClients:40,
-    location:'India', deliveryMode:['Online','Classroom'],
-    pastDeliveries:[
-      {client:'Microsoft',topic:'Designing Intelligent Agentic Systems with LLMs',batches:20,participants:400,year:'2025-26'},
-      {client:'Microsoft',topic:'Azure AI Foundry & Copilot Studio',batches:5,participants:80,year:'2025'},
-      {client:'Zensar Technologies',topic:'GitHub Copilot for Developers',batches:3,participants:45,year:'2024'},
-    ],
-    feedback:{
-      avgDemo:4.9, avgPresentation:4.8, avgQuerySolving:4.9, avgOverall:4.8,
-      totalRespondents:180,
-      topVerbatims:[
-        {text:"Maruti is hands down the best instructor I have known. Great content, great explanation, very patient.", from:"Venkat Popuri, Microsoft"},
-        {text:"Excellent trainer who was very helpful, patient and covered a wide range of topics whilst balancing the various tech and knowledge levels.", from:"Siby Joseph, Microsoft"},
-        {text:"Maruti was able to stay on track, be concise and take on our questions, helping those having issues and adapting content to the audience.", from:"Marcos Umino, Microsoft"},
-      ]
-    },
-    driveFileId:'1IiFen2qq27XNLvqOkQU_2tEbJ5cg3JNN',
-    notes:'Primary Microsoft trainer for Agentic AI. Extremely high feedback scores across 20+ batches.'
-  },
-  {
-    id:'t2', name:'Saket Karnik', status:'approved',
-    headline:'.NET, Azure & Agentic AI | 1000+ Corporate Workshops',
-    avatar:'SK',
-    avatarColor:'linear-gradient(135deg,#0d9488,#0284c7)',
-    specializations:['Azure OpenAI','Azure AI Foundry','AutoGen','LangChain','.NET 8','ReactJS','GitHub Copilot','DevOps'],
-    domains:['AI / GenAI','Cloud / Azure','Java / .NET'],
-    totalExpYears:25, corporateTrainingYears:20, corporateClients:60,
-    location:'India', deliveryMode:['Online','Classroom'],
-    pastDeliveries:[
-      {client:'Zensar Technologies',topic:'GitHub CoPilot for Developers',batches:3,participants:60,year:'2024-25'},
-      {client:'GEP Solutions',topic:'Designing Agentic AI Systems with LLMs',batches:2,participants:30,year:'2025'},
-      {client:'EdgeVerve Systems (Infosys)',topic:'Agentic AI with LLMs',batches:2,participants:40,year:'2025'},
-      {client:'Microsoft IDC Hyderabad',topic:'ReactJS with Redux',batches:5,participants:80,year:'2018-22'},
-      {client:'ABB India',topic:'Developing Solutions using Azure AZ-204',batches:2,participants:25,year:'2023'},
-      {client:'Vodafone Shared Services',topic:'Advanced Azure Services',batches:4,participants:60,year:'2022'},
-    ],
-    feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},
-    driveFileId:'1IiFen2qq27XNLvqOkQU_2tEbJ5cg3JNN',
-    notes:'Extremely experienced. 1000+ corporate workshops. Strong on Azure + .NET + Agentic AI.'
-  },
-  {
-    id:'t3', name:'Daniel Jadi', status:'approved',
-    headline:'Data Science & AI | International Trainer | 8+ Years',
-    avatar:'DJ',
-    avatarColor:'linear-gradient(135deg,#ea580c,#f59e0b)',
-    specializations:['Data Science','Machine Learning','GenAI','LLMs','GCP Vertex AI','AWS SageMaker','Power BI','Python'],
-    domains:['AI / GenAI','Data Engineering'],
-    totalExpYears:8, corporateTrainingYears:7, corporateClients:30,
-    location:'Hyderabad, India', deliveryMode:['Online','Classroom'],
-    pastDeliveries:[
-      {client:'PDO Oman',topic:'Introduction to AI with Real-World Applications',batches:1,participants:30,year:'2023'},
-      {client:'Vodafone Muscat',topic:'AI Fundamentals & Applications for Telecom',batches:2,participants:45,year:'2023'},
-      {client:'Du Telecom Dubai',topic:'GenAI Solutions for Telecom',batches:1,participants:20,year:'2024'},
-      {client:'Lazada Singapore',topic:'AI for Business Applications',batches:1,participants:50,year:'2024'},
-      {client:'NTPC Ramagundam',topic:'AI Integration with IoT Edge Devices',batches:3,participants:60,year:'2024'},
-      {client:'Marriott International',topic:'Generative & Agentic AI Workshop',batches:1,participants:25,year:'2025'},
-    ],
-    feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},
-    driveFileId:'1v0HfOmHc7QhL4FO19QWMcwiNP5hi-EKN',
-    notes:'Strong international delivery track record. Good for telecom, healthcare, banking AI use cases.'
-  },
-  {
-    id:'t4', name:'Bharani GR', status:'approved',
-    headline:'Software Testing & SDET | 10 Years | 12,000+ Students',
-    avatar:'BG',
-    avatarColor:'linear-gradient(135deg,#059669,#0d9488)',
-    specializations:['Selenium WebDriver','Java','TestNG','BDD Cucumber','REST API Testing','Jenkins','GitHub','UFT'],
-    domains:['Software Testing'],
-    totalExpYears:10, corporateTrainingYears:8, corporateClients:15,
-    location:'India', deliveryMode:['Online','Classroom'],
-    pastDeliveries:[
-      {client:'Cognizant',topic:'Software Testing (Multiple Batches)',batches:15,participants:300,year:'2018-24'},
-      {client:'Deutsche Bank',topic:'Software Testing',batches:2,participants:30,year:'2022'},
-      {client:'Cigniti Technologies',topic:'Software Testing & Automation',batches:3,participants:45,year:'2023'},
-      {client:'Sony',topic:'Software Testing',batches:1,participants:20,year:'2022'},
-      {client:'TCS',topic:'Software Testing',batches:2,participants:40,year:'2023'},
-    ],
-    feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},
-    driveFileId:'11XvrRhl14jCmdh6YQSLqPM3t8nmk1bQH',
-    notes:'Specialist in Testing. Trained 12,000+ students. Strong Cognizant relationship.'
-  },
-  {
-    id:'t5', name:'Chetan Natu', status:'approved',
-    headline:'Java / J2EE & Big Data | 22 Years | IBM Certified',
-    avatar:'CN',
-    avatarColor:'linear-gradient(135deg,#2563eb,#0d9488)',
-    specializations:['Java','J2EE','Spring','Hibernate','Android','Big Data','Hadoop','MEAN Stack'],
-    domains:['Java / .NET','Data Engineering'],
-    totalExpYears:22, corporateTrainingYears:18, corporateClients:35,
-    location:'Pune, India', deliveryMode:['Online','Classroom'],
-    pastDeliveries:[
-      {client:'Tech Mahindra',topic:'J2EE (JSP, Servlet, EJB)',batches:2,participants:30,year:'2015-20'},
-      {client:'Cognizant',topic:'Java, Spring, EJB',batches:3,participants:45,year:'2018-22'},
-      {client:'John Deere',topic:'J2EE',batches:1,participants:20,year:'2019'},
-      {client:'Persistent Systems',topic:'Spring, Hibernate, ReactJS',batches:4,participants:60,year:'2019-22'},
-      {client:'Syntel',topic:'J2EE, Struts',batches:2,participants:30,year:'2017'},
-    ],
-    feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},
-    driveFileId:'1zpH1oxaASLeeIzzSGe1m4jjKWSrh8qYr',
-    notes:'Deep Java/J2EE expertise. IBM Certified. Good for lateral Java upskilling programmes.'
-  },
-  {
-    id:'t6', name:'Vinay Kumar', status:'approved',
-    headline:'Agentic AI & Healthcare AI | IIT Kharagpur | ISB',
-    avatar:'VK',
-    avatarColor:'linear-gradient(135deg,#7c3aed,#db2777)',
-    specializations:['Agentic AI','LangChain','LangGraph','CrewAI','RAG','Prompt Engineering','NLP','Azure','AWS'],
-    domains:['AI / GenAI'],
-    totalExpYears:12, corporateTrainingYears:5, corporateClients:12,
-    location:'Bangalore, India', deliveryMode:['Online','Classroom'],
-    pastDeliveries:[
-      {client:'IIT Madras',topic:'Agentic AI Systems',batches:2,participants:40,year:'2025'},
-      {client:'Microsoft Executive Programs',topic:'AI Strategy & Agentic Systems',batches:3,participants:30,year:'2025'},
-      {client:'K21 Academy (UK)',topic:'Agentic AI & Multi-agent Workflows',batches:2,participants:25,year:'2025'},
-      {client:'Atria University',topic:'Agentic AI, NLP, ML-LLMOps',batches:4,participants:80,year:'2024-25'},
-    ],
-    feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},
-    driveFileId:'1ntzIa1lDQM809k-Sa46Tat6T5OqQgZoP',
-    notes:'Strong academic credentials. Good for leadership/strategy AI programmes. ISB + IIT Kharagpur background.'
-  },
-  {
-    id:'t7', name:'Dr. Masiyuddin Khan', status:'approved',
-    headline:'AIML & GenAI Engineer | Data Science | Corporate Trainer',
-    avatar:'MK',
-    avatarColor:'linear-gradient(135deg,#dc2626,#ea580c)',
-    specializations:['Machine Learning','Deep Learning','GenAI','NLP','GCP Vertex AI','Gemini','RAG','Statistics'],
-    domains:['AI / GenAI','Data Engineering'],
-    totalExpYears:7, corporateTrainingYears:4, corporateClients:8,
-    location:'Mumbai, India', deliveryMode:['Online'],
-    pastDeliveries:[
-      {client:'Somml Health',topic:'AI-Powered Healthcare Assistant',batches:1,participants:15,year:'2025'},
-      {client:'Domain Money',topic:'AI Financial Document Processing',batches:1,participants:10,year:'2025'},
-    ],
-    feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},
-    driveFileId:'1p6lFulwAXtysxhfEVaKjaaAi2qpIw9nT',
-    notes:'Newer trainer. Strong GCP/Gemini expertise. Good for healthcare AI and fintech use cases.'
-  },
+  {id:'t1',name:'Maruti Makwana',status:'approved',headline:'Agentic AI & Azure Expert | 20+ Microsoft Batches',avatar:'MM',avatarColor:'linear-gradient(135deg,#4338ca,#7c3aed)',specializations:['Agentic AI','LLMs','Azure AI Foundry','Prompt Engineering','RAG','AutoGen','LangChain','MCP'],domains:['AI / GenAI','Cloud / Azure'],totalExpYears:12,corporateTrainingYears:8,corporateClients:40,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Microsoft',topic:'Designing Intelligent Agentic Systems with LLMs',batches:20,participants:400,year:'2025-26'},{client:'Microsoft',topic:'Azure AI Foundry & Copilot Studio',batches:5,participants:80,year:'2025'},{client:'Zensar Technologies',topic:'GitHub Copilot for Developers',batches:3,participants:45,year:'2024'}],feedback:{avgDemo:4.9,avgPresentation:4.8,avgQuerySolving:4.9,avgOverall:4.8,totalRespondents:180,topVerbatims:[{text:"Maruti is hands down the best instructor I have known. Great content, great explanation, very patient.",from:"Venkat Popuri, Microsoft"},{text:"Excellent trainer who covered a wide range of topics whilst balancing the various tech and knowledge levels.",from:"Siby Joseph, Microsoft"},{text:"Maruti was able to stay on track, be concise and take on our questions, adapting content to the audience.",from:"Marcos Umino, Microsoft"}]},driveFileId:'1FHJ6psAsQ4gg6d2GgDVJCVkttZKpK_3C',notes:'Primary Microsoft trainer for Agentic AI. 4.8+ avg across 20+ batches. 400+ participants trained at Microsoft globally.'},
+  {id:'t2',name:'Saket Karnik',status:'approved',headline:'.NET, Azure & Agentic AI | 1000+ Corporate Workshops | 25yr Exp',avatar:'SK',avatarColor:'linear-gradient(135deg,#0d9488,#0284c7)',specializations:['Azure OpenAI','Azure AI Foundry','AutoGen','LangChain','.NET 8','ReactJS','GitHub Copilot','DevOps','Agile'],domains:['AI / GenAI','Cloud / Azure','Java / .NET'],totalExpYears:25,corporateTrainingYears:20,corporateClients:60,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Zensar Technologies',topic:'GitHub CoPilot for Developers',batches:3,participants:60,year:'2024-25'},{client:'GEP Solutions',topic:'Designing Agentic AI Systems with LLMs',batches:2,participants:30,year:'2025'},{client:'EdgeVerve Systems (Infosys)',topic:'Agentic AI with LLMs',batches:2,participants:40,year:'2025'},{client:'ABB India',topic:'Azure AZ-204 Solutions',batches:2,participants:25,year:'2023'},{client:'Microsoft IDC Hyderabad',topic:'ReactJS with Redux',batches:5,participants:80,year:'2018-22'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1IiFen2qq27XNLvqOkQU_2tEbJ5cg3JNN',notes:'Extremely experienced. 1000+ workshops. Strong Azure + .NET + Agentic AI delivery across top corporates.'},
+  {id:'t3',name:'Daniel Jadi',status:'approved',headline:'Data Science & AI | International Trainer | Middle East & SEA',avatar:'DJ',avatarColor:'linear-gradient(135deg,#ea580c,#f59e0b)',specializations:['Data Science','Machine Learning','GenAI','LLMs','GCP Vertex AI','AWS SageMaker','Power BI','Python'],domains:['AI / GenAI','Data Engineering'],totalExpYears:8,corporateTrainingYears:7,corporateClients:30,location:'Hyderabad, India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'PDO Oman',topic:'Introduction to AI with Real-World Applications',batches:1,participants:30,year:'2023'},{client:'Vodafone Muscat',topic:'AI Fundamentals for Telecom',batches:2,participants:45,year:'2023'},{client:'Du Telecom Dubai',topic:'GenAI Solutions for Telecom',batches:1,participants:20,year:'2024'},{client:'Lazada Singapore',topic:'AI for Business Applications',batches:1,participants:50,year:'2024'},{client:'NTPC Ramagundam',topic:'AI Integration with IoT',batches:3,participants:60,year:'2024'},{client:'Marriott International',topic:'Generative & Agentic AI Workshop',batches:1,participants:25,year:'2025'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1v0HfOmHc7QhL4FO19QWMcwiNP5hi-EKN',notes:'Strong international delivery. Good for telecom, hospitality, banking AI use cases.'},
+  {id:'t4',name:'Bharani GR',status:'approved',headline:'Software Testing & SDET | 10yr | 12,000+ Students Trained',avatar:'BG',avatarColor:'linear-gradient(135deg,#059669,#0d9488)',specializations:['Selenium WebDriver','Java','TestNG','BDD Cucumber','REST API Testing','Jenkins','UFT','Performance Testing'],domains:['Software Testing'],totalExpYears:10,corporateTrainingYears:8,corporateClients:15,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Cognizant',topic:'Software Testing & Automation',batches:15,participants:300,year:'2018-24'},{client:'Deutsche Bank',topic:'Software Testing',batches:2,participants:30,year:'2022'},{client:'Cigniti Technologies',topic:'Software Testing & Automation',batches:3,participants:45,year:'2023'},{client:'Sony',topic:'Software Testing',batches:1,participants:20,year:'2022'},{client:'TCS',topic:'Software Testing',batches:2,participants:40,year:'2023'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'11XvrRhl14jCmdh6YQSLqPM3t8nmk1bQH',notes:'Specialist in Testing. 12,000+ students trained. Strong Cognizant relationship.'},
+  {id:'t5',name:'Chetan Natu',status:'approved',headline:'Java / J2EE & Big Data | 22yr | IBM Certified Trainer',avatar:'CN',avatarColor:'linear-gradient(135deg,#2563eb,#0d9488)',specializations:['Java','J2EE','Spring','Hibernate','Android','Big Data','Hadoop','MEAN Stack','React'],domains:['Java / .NET','Data Engineering'],totalExpYears:22,corporateTrainingYears:18,corporateClients:35,location:'Pune, India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Tech Mahindra',topic:'J2EE (JSP, Servlet, EJB)',batches:2,participants:30,year:'2015-20'},{client:'Cognizant',topic:'Java, Spring, EJB',batches:3,participants:45,year:'2018-22'},{client:'John Deere',topic:'J2EE',batches:1,participants:20,year:'2019'},{client:'Persistent Systems',topic:'Spring, Hibernate, ReactJS',batches:4,participants:60,year:'2019-22'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1zpH1oxaASLeeIzzSGe1m4jjKWSrh8qYr',notes:'Deep Java/J2EE expertise. IBM Certified. Good for lateral Java upskilling programmes.'},
+  {id:'t6',name:'Vinay Kumar',status:'approved',headline:'Agentic AI, LangGraph & Healthcare AI | IIT Kharagpur | ISB',avatar:'VK',avatarColor:'linear-gradient(135deg,#7c3aed,#db2777)',specializations:['Agentic AI','LangChain','LangGraph','CrewAI','RAG','Prompt Engineering','NLP','Azure','AWS'],domains:['AI / GenAI'],totalExpYears:12,corporateTrainingYears:5,corporateClients:12,location:'Bangalore, India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'IIT Madras',topic:'Agentic AI Systems',batches:2,participants:40,year:'2025'},{client:'Microsoft Executive Programs',topic:'AI Strategy & Agentic Systems',batches:3,participants:30,year:'2025'},{client:'K21 Academy UK',topic:'Agentic AI & Multi-agent Workflows',batches:2,participants:25,year:'2025'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1ntzIa1lDQM809k-Sa46Tat6T5OqQgZoP',notes:'IIT Kharagpur + ISB background. Good for leadership AI strategy programmes.'},
+  {id:'t7',name:'Dr. Masiyuddin Khan',status:'approved',headline:'AIML & GenAI | GCP Vertex AI & Gemini Expert',avatar:'MK',avatarColor:'linear-gradient(135deg,#dc2626,#ea580c)',specializations:['Machine Learning','Deep Learning','GenAI','NLP','GCP Vertex AI','Gemini','RAG','Statistics'],domains:['AI / GenAI','Data Engineering'],totalExpYears:7,corporateTrainingYears:4,corporateClients:8,location:'Mumbai, India',deliveryMode:['Online'],pastDeliveries:[{client:'Somml Health',topic:'AI-Powered Healthcare Assistant',batches:1,participants:15,year:'2025'},{client:'Domain Money',topic:'AI Financial Document Processing',batches:1,participants:10,year:'2025'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1p6lFulwAXtysxhfEVaKjaaAi2qpIw9nT',notes:'Strong GCP/Gemini expertise. Good for healthcare AI and fintech use cases.'},
+  {id:'t8',name:'Krishnendu Roy',status:'approved',headline:'Dynamics 365 F&O Expert | 22yr | Ex-Microsoft | Global Trainer',avatar:'KR',avatarColor:'linear-gradient(135deg,#0284c7,#4338ca)',specializations:['Dynamics 365 F&O','Power Platform','Power BI','Azure Integration','D365 CE','Supply Chain','Finance Module','X++ Development'],domains:['ERP / D365'],totalExpYears:22,corporateTrainingYears:8,corporateClients:25,location:'Hyderabad, India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Microsoft (Global)',topic:'Dynamics 365 F&O Advanced Development',batches:10,participants:200,year:'2016-24'},{client:'Microsoft (Global)',topic:'Dynamics 365 Azure Integration',batches:6,participants:100,year:'2017-22'},{client:'Hoya Corporation Singapore',topic:'D365 F&O Development Workshop',batches:1,participants:20,year:'2020'},{client:'Gateley Plc Birmingham',topic:'D365 F&O Implementation Methodology',batches:1,participants:15,year:'2019'},{client:'Tieto India / Cap Gemini',topic:'D365 F&O Advanced Development',batches:3,participants:45,year:'2018-20'},{client:'PricewaterhouseCoopers',topic:'Dynamics AX 2012 R3 Technical Training',batches:2,participants:30,year:'2018'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'19k_6qAUX1W1OV39QwMqClqB3Ue2qzsI0',notes:'Ex-Microsoft 9yr. Delivered D365 training globally (Bangkok, Amsterdam, Milan, Mexico City, Johannesburg, Istanbul). Microsoft cert content developer.'},
+  {id:'t9',name:'Srijit Panja',status:'approved',headline:'GenAI, Agentic AI & RAG | LangChain Expert',avatar:'SR',avatarColor:'linear-gradient(135deg,#059669,#4338ca)',specializations:['GenAI','Agentic AI','RAG','LangChain','LangGraph','Prompt Engineering','Vector Databases','Python'],domains:['AI / GenAI'],totalExpYears:10,corporateTrainingYears:4,corporateClients:10,location:'India',deliveryMode:['Online'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1YY8pG88QbXmK0gW273OmXW4ELR9fnFSx',notes:'GenAI and Agentic AI specialist. Profile in Drive.'},
+  {id:'t10',name:'Venkata S M',status:'approved',headline:'Mainframe & COBOL Modernization Expert | 20yr',avatar:'VS',avatarColor:'linear-gradient(135deg,#475569,#0d9488)',specializations:['Mainframe','COBOL','JCL','VSAM','DB2','COBOL Modernization','z/OS','MicroFocus'],domains:['Mainframe / Legacy'],totalExpYears:20,corporateTrainingYears:10,corporateClients:15,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1MC2EYNNMVU72fHbXg9BULYdag7_KMe5o',notes:'Mainframe/COBOL specialist. Rare skill set.'},
+  {id:'t11',name:'Dr. B R Vishwanath',status:'approved',headline:'AI/ML, DevOps & MLOps | PhD | Bangalore',avatar:'BV',avatarColor:'linear-gradient(135deg,#7c3aed,#0d9488)',specializations:['AI/ML','MLOps','DevOps','Deep Learning','Computer Vision','NLP','Docker','Kubernetes'],domains:['AI / GenAI','DevOps'],totalExpYears:18,corporateTrainingYears:10,corporateClients:20,location:'Bangalore, India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1OG5QFeAgY97qplfvN0nL2KV4KmuwOzMM',notes:'PhD. AI/ML and MLOps specialist.'},
+  {id:'t12',name:'Sachin Hadap',status:'approved',headline:'Java Full Stack | Spring Boot, React & Microservices',avatar:'SH',avatarColor:'linear-gradient(135deg,#ea580c,#2563eb)',specializations:['Java','Spring Boot','Microservices','React','REST APIs','Docker','Kubernetes','MySQL'],domains:['Java / .NET'],totalExpYears:15,corporateTrainingYears:8,corporateClients:12,location:'Pune, India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Zensar Technologies',topic:'Java Full Stack Training',batches:3,participants:60,year:'2024-25'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1PbNGY1vamFU9UXypVwVM1b9RomfBdtRq',notes:'Java Full Stack specialist. Trainer evaluation summary available in Drive.'},
+  {id:'t13',name:'Jayanta Kumar Das',status:'approved',headline:'MEAN & MERN Stack Expert | Full Stack Trainer',avatar:'JD',avatarColor:'linear-gradient(135deg,#059669,#ea580c)',specializations:['MongoDB','Express','Angular','React','Node.js','JavaScript','TypeScript','REST APIs'],domains:['Java / .NET'],totalExpYears:12,corporateTrainingYears:6,corporateClients:10,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[{client:'Zensar Technologies',topic:'MEAN/MERN Stack Training',batches:2,participants:40,year:'2024-25'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1KIij7Pk-N1Xa2KrhqoA2rACrCiVaDT7j',notes:'MEAN/MERN specialist. Trainer evaluation in Drive.'},
+  {id:'t14',name:'Siddharth Sarkar',status:'approved',headline:'ServiceNow Trainer & Consultant | ITSM Expert',avatar:'SS',avatarColor:'linear-gradient(135deg,#0284c7,#059669)',specializations:['ServiceNow','ITSM','ITOM','CSM','GRC','Flow Designer','Integration Hub','JavaScript'],domains:['ServiceNow / ITSM'],totalExpYears:10,corporateTrainingYears:5,corporateClients:10,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1h9U8kqot7tY3Ggg-Ejo8cxR0PpmnWEy6',notes:'ServiceNow specialist.'},
+  {id:'t15',name:'Ashu Lekhi',status:'approved',headline:'Java, React & Full Stack Corporate Trainer',avatar:'AL',avatarColor:'linear-gradient(135deg,#4338ca,#059669)',specializations:['Java','React','Spring Boot','Microservices','Angular','Node.js','REST APIs','Agile'],domains:['Java / .NET'],totalExpYears:15,corporateTrainingYears:8,corporateClients:15,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1Y4kCSLDiHoNe_BClrkpB4_c-SELFjwnx',notes:'Java and Frontend specialist.'},
+  {id:'t16',name:'Yati Gharat',status:'approved',headline:'Cybersecurity & Networking Master Trainer',avatar:'YG',avatarColor:'linear-gradient(135deg,#dc2626,#475569)',specializations:['Cybersecurity','Network Security','Ethical Hacking','CEH','CISSP','Penetration Testing','Firewalls','SIEM'],domains:['Cybersecurity'],totalExpYears:15,corporateTrainingYears:10,corporateClients:20,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1uICfUZAxehoAxDWBtv-4-Be1cjaL-xmz',notes:'Cybersecurity specialist.'},
+  {id:'t17',name:'Kishore',status:'approved',headline:'Microsoft Fabric & Power BI Expert | Data Engineer',avatar:'KI',avatarColor:'linear-gradient(135deg,#f59e0b,#0284c7)',specializations:['Microsoft Fabric','Power BI','Data Engineering','Azure Synapse','Delta Lake','Medallion Architecture','DAX','Power Query'],domains:['Data Engineering','Cloud / Azure'],totalExpYears:12,corporateTrainingYears:6,corporateClients:12,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1oWyg5jAsfUvEhZ0VZT7z2rlReIGY1BGn',notes:'Microsoft Fabric specialist. PDF + PPTX profile in Drive.'},
+  {id:'t18',name:'Baskaran',status:'approved',headline:'Oracle EBS & Fusion Cloud Financials | Senior Trainer',avatar:'BA',avatarColor:'linear-gradient(135deg,#ea580c,#dc2626)',specializations:['Oracle EBS','Oracle Fusion Cloud','Financial Accounting','Supply Chain','Procurement','Oracle R12','Cloud Financials'],domains:['ERP / Oracle'],totalExpYears:20,corporateTrainingYears:10,corporateClients:15,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1ZDOGIJyWUyLxC-iA9D3ZoJy8FDI140Kk',notes:'Oracle EBS and Fusion Cloud Financials specialist.'},
+  {id:'t19',name:'Anita Gupta',status:'approved',headline:'AI & Microsoft 365 Copilot Trainer',avatar:'AG',avatarColor:'linear-gradient(135deg,#db2777,#7c3aed)',specializations:['Microsoft 365 Copilot','AI for Business','Power Platform','SharePoint','Teams','Office 365','Productivity AI'],domains:['AI / GenAI','Microsoft 365'],totalExpYears:15,corporateTrainingYears:10,corporateClients:20,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1ZS54M9N33gEceH8EQ0b7JSm38h6zU8pz',notes:'M365 Copilot specialist. Good for business user AI adoption programmes.'},
+  {id:'t20',name:'Md. Mohit',status:'approved',headline:'GenAI Trainer | Multi-lingual: Arabic, English, Hindi, Urdu',avatar:'MH',avatarColor:'linear-gradient(135deg,#0d9488,#4338ca)',specializations:['GenAI','LLMs','Prompt Engineering','Arabic Language AI','NLP','Chatbots','Azure OpenAI'],domains:['AI / GenAI'],totalExpYears:8,corporateTrainingYears:4,corporateClients:8,location:'India / Middle East',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1BrDiH5XTWzUVbJFDTQT_1EyCTvZlPVnm',notes:'Unique: GenAI training in Arabic, English, Hindi, Urdu. Best for Middle East clients.'},
+  {id:'t21',name:'Niharika R',status:'approved',headline:'Soft Skills & Communication Trainer | Pune',avatar:'NR',avatarColor:'linear-gradient(135deg,#db2777,#f59e0b)',specializations:['Soft Skills','Communication','Leadership','Presentation Skills','Team Building','Emotional Intelligence','Business Writing'],domains:['Leadership / Soft Skills'],totalExpYears:12,corporateTrainingYears:10,corporateClients:25,location:'Pune, India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1FASes9SO1xmvOElgBtLwbKxySdAXAtp3',notes:'Soft skills specialist in Pune.'},
+  {id:'t22',name:'Saurabh P (Oracle OIC)',status:'approved',headline:'Oracle Integration Cloud (OIC) & Technical Specialist',avatar:'SO',avatarColor:'linear-gradient(135deg,#ea580c,#f59e0b)',specializations:['Oracle OIC','Oracle Integration Cloud','REST APIs','SOAP','Oracle Cloud','PaaS','Database Integration'],domains:['ERP / Oracle'],totalExpYears:12,corporateTrainingYears:5,corporateClients:8,location:'India',deliveryMode:['Online'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1NXc_2zz2bgkV4aev2hpxLckKiLBEjoaF',notes:'Oracle OIC specialist.'},
+  {id:'t23',name:'Saket Patrikar',status:'approved',headline:'PMP & Business Analysis | Senior Corporate Trainer | 20yr',avatar:'SP3',avatarColor:'linear-gradient(135deg,#475569,#2563eb)',specializations:['Project Management','PMP','Business Analysis','Agile','Scrum','PRINCE2','Risk Management'],domains:['Agile / Scrum','Leadership / Soft Skills'],totalExpYears:20,corporateTrainingYears:12,corporateClients:30,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'13cbzuBx_Bc3gXBZ4RVMP3xSiVJv18q0x',notes:'PMP and Business Analysis specialist. 20yr experience.'},
+  {id:'t24',name:'Tapan Kumar',status:'approved',headline:'Senior AI Consultant & Corporate Trainer | 20yr',avatar:'TK',avatarColor:'linear-gradient(135deg,#4338ca,#dc2626)',specializations:['AI','Machine Learning','Data Science','Python','Deep Learning','Corporate Training','Business AI'],domains:['AI / GenAI'],totalExpYears:20,corporateTrainingYears:10,corporateClients:20,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1w1DObBC4iWa3J67SzjFLU7GCBSUH9iGZ',notes:'Senior AI consultant and trainer.'},
+  {id:'t25',name:'Vivek Dutta Mishra',status:'approved',headline:'MERN Stack & Full Stack Trainer',avatar:'VD',avatarColor:'linear-gradient(135deg,#059669,#2563eb)',specializations:['MERN Stack','MongoDB','Express','React','Node.js','JavaScript','TypeScript','REST APIs'],domains:['Java / .NET'],totalExpYears:10,corporateTrainingYears:5,corporateClients:8,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1f9Fv7R8WwsA0G3CTqDGc1VIHI7HFtL4h',notes:'MERN Stack specialist.'},
+  {id:'t26',name:'S. Seethalakshmi',status:'approved',headline:'.NET Stack & Corporate Training | Trainer',avatar:'SL',avatarColor:'linear-gradient(135deg,#7c3aed,#059669)',specializations:['.NET','C#','ASP.NET','MVC','Angular','SQL Server','Web APIs','Entity Framework'],domains:['Java / .NET'],totalExpYears:15,corporateTrainingYears:8,corporateClients:12,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1E_edR1qUfBnANgG6RPBNKpTd16QgkoO8',notes:'.NET Stack specialist.'},
+  {id:'t27',name:'Prerita',status:'approved',headline:'AI & GenAI Corporate Trainer | OI Master Trainer',avatar:'PT',avatarColor:'linear-gradient(135deg,#db2777,#0d9488)',specializations:['AI','GenAI','Machine Learning','Corporate Training','LLMs','Agentic AI'],domains:['AI / GenAI'],totalExpYears:10,corporateTrainingYears:6,corporateClients:10,location:'India',deliveryMode:['Online'],pastDeliveries:[{client:'Microsoft',topic:'Agentic AI Systems with LLMs',batches:5,participants:80,year:'2025-26'}],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'12D3SnMux0mvpws2vfCbjnwHGACb3VELG',notes:'OI Master Trainer. Co-trainer with Maruti on Microsoft Agentic AI batches.'},
+  {id:'t28',name:'Navin M',status:'approved',headline:'GenAI Specialist | OI Master Trainer 2026',avatar:'NV',avatarColor:'linear-gradient(135deg,#4338ca,#059669)',specializations:['GenAI','LLMs','Agentic AI','Prompt Engineering','Azure OpenAI','Python'],domains:['AI / GenAI'],totalExpYears:10,corporateTrainingYears:5,corporateClients:10,location:'India',deliveryMode:['Online'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1srxiW_3StQ3RFzAM1UdGhUqe8unctapD',notes:'OI Master Trainer for GenAI 2026.'},
+  {id:'t29',name:'Sanjay Bhure',status:'approved',headline:'FMEA & Quality Engineering | Manufacturing Trainer',avatar:'SBR',avatarColor:'linear-gradient(135deg,#f59e0b,#dc2626)',specializations:['FMEA','Quality Engineering','Six Sigma','Lean Manufacturing','Root Cause Analysis','PFMEA','Control Plans'],domains:['Quality / Manufacturing'],totalExpYears:18,corporateTrainingYears:10,corporateClients:20,location:'India',deliveryMode:['Online','Classroom'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'15WH2P85xuFZL9kiQzqhynSDr4SKKh8RV',notes:'FMEA and Quality Engineering specialist.'},
+  {id:'t30',name:'Padma',status:'approved',headline:'Salesforce Revenue Cloud & CPQ Trainer',avatar:'PD',avatarColor:'linear-gradient(135deg,#0284c7,#db2777)',specializations:['Salesforce Revenue Cloud','CPQ','Billing','Salesforce CRM','Sales Cloud','Service Cloud','Apex'],domains:['Salesforce / CRM'],totalExpYears:12,corporateTrainingYears:5,corporateClients:8,location:'India',deliveryMode:['Online'],pastDeliveries:[],feedback:{avgDemo:null,avgPresentation:null,avgQuerySolving:null,avgOverall:null,totalRespondents:0,topVerbatims:[]},driveFileId:'1AN9aLWSV_lnPeEHy7pZW8T7S1s9cUk7S',notes:'Salesforce Revenue Cloud specialist.'},
 ];
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
