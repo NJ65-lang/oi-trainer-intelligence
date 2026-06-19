@@ -420,6 +420,13 @@ function init() {
   document.getElementById('profileFolderId').value = state.settings.profileFolderId;
   document.getElementById('feedbackFolderId').value = state.settings.feedbackFolderId;
   if (state.settings.anthropicKey) document.getElementById('anthropicKey').value = state.settings.anthropicKey;
+  // Auto-search if coming from Funnel app
+  const urlParams = new URLSearchParams(window.location.search);
+  const autoSearch = urlParams.get('search');
+  if (autoSearch) {
+    document.getElementById('searchQuery').value = autoSearch;
+    setTimeout(() => runSearch(), 500);
+  }
   if (state.settings.openaiKey) document.getElementById('openaiKey').value = state.settings.openaiKey;
   if (state.settings.aiProvider) { document.getElementById('aiProvider').value = state.settings.aiProvider; toggleProviderKey(); }
   if (state.lastSynced) document.getElementById('lastSynced').textContent = state.lastSynced;
