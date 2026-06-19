@@ -332,9 +332,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div class="settings-title">🔗 Google Drive Connection</div>
     <div class="field"><label>Profile Folder ID</label><input id="profileFolderId" placeholder="1BXVGAXW86WrsYw6fp3mwB8CpnDElOelX" value="1BXVGAXW86WrsYw6fp3mwB8CpnDElOelX"></div>
     <div class="field"><label>Feedback Folder ID</label><input id="feedbackFolderId" placeholder="1kymRPxgbcV-iGQBSMvc_68hJ5bs-XGUv" value="1kymRPxgbcV-iGQBSMvc_68hJ5bs-XGUv"></div>
-    <div class="field"><label>Anthropic API Key (for AI extraction)</label><input type="password" id="anthropicKey" placeholder="sk-ant-…"></div>
+    <div class="field"><label>AI Provider</label>
+      <select id="aiProvider" onchange="toggleProviderKey()" style="background:var(--surface2);border:1.5px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px;font-family:var(--font);width:100%">
+        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="openai">OpenAI (GPT-4o)</option>
+      </select>
+    </div>
+    <div class="field" id="anthropicKeyField"><label>Anthropic API Key</label><input type="password" id="anthropicKey" placeholder="sk-ant-…"></div>
+    <div class="field" id="openaiKeyField" style="display:none"><label>OpenAI API Key</label><input type="password" id="openaiKey" placeholder="sk-…"></div>
     <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
-    <p class="info-text">💡 Folder IDs are pre-filled from your Drive. The Anthropic API key powers the AI profile extraction.</p>
+    <p class="info-text">💡 Folder IDs are pre-filled from your Drive. Both Anthropic (Claude) and OpenAI (GPT-4o) are supported for AI extraction and search.</p>
   </div>
   <div class="settings-card">
     <div class="settings-title">🔄 Sync Data from Drive</div>
@@ -365,7 +372,9 @@ let state = {
   settings: {
     profileFolderId: '1BXVGAXW86WrsYw6fp3mwB8CpnDElOelX',
     feedbackFolderId: '1kymRPxgbcV-iGQBSMvc_68hJ5bs-XGUv',
-    anthropicKey: ''
+    anthropicKey: '',
+    openaiKey: '',
+    aiProvider: 'anthropic'
   },
   lastSynced: null
 };
@@ -411,6 +420,8 @@ function init() {
   document.getElementById('profileFolderId').value = state.settings.profileFolderId;
   document.getElementById('feedbackFolderId').value = state.settings.feedbackFolderId;
   if (state.settings.anthropicKey) document.getElementById('anthropicKey').value = state.settings.anthropicKey;
+  if (state.settings.openaiKey) document.getElementById('openaiKey').value = state.settings.openaiKey;
+  if (state.settings.aiProvider) { document.getElementById('aiProvider').value = state.settings.aiProvider; toggleProviderKey(); }
   if (state.lastSynced) document.getElementById('lastSynced').textContent = state.lastSynced;
   renderRoster();
   renderRosterStats();
@@ -553,7 +564,7 @@ async function runSearch() {
   area.innerHTML = `<div class="loading-card"><div class="spinner"></div><div class="loading-text">AI is matching your requirement against ${state.trainers.filter(t=>t.status==='approved').length} trainers…</div></div>`;
 
   try {
-    const apiKey = state.settings.anthropicKey;
+    const apiKey = state.settings.aiProvider === 'openai' ? state.settings.openaiKey : state.settings.anthropicKey;
     if (!apiKey) {
       // Fallback: keyword matching
       area.innerHTML = '';
@@ -602,19 +613,8 @@ Match the requirement against all trainers. Return JSON only:
 Sort by matchScore descending. Include max 4 matches. Only include genuinely suitable trainers.
 Scoring priority: 1) Exact same topic delivered before (highest weight) 2) Corporate training years + client count 3) Feedback score 4) Domain alignment`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const data = await response.json();
-    const text = data.content?.find(b => b.type === 'text')?.text || '';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
+    const aiResult = await callAI(prompt);
+    const result = JSON.parse(aiResult);
     area.innerHTML = '';
     renderSearchResults(result.matches, query, area);
   } catch(err) {
@@ -784,9 +784,8 @@ function readFileText(file) {
 }
 
 async function extractProfileWithAI(text, fileName) {
-  const apiKey = state.settings.anthropicKey;
+  const apiKey = state.settings.aiProvider === 'openai' ? state.settings.openaiKey : state.settings.anthropicKey;
   if (!apiKey) {
-    // Return a blank template for manual fill
     const namePart = fileName.replace(/\.(pdf|docx)/gi, '').replace(/_/g, ' ').replace(/OI_Trainer_Profile_/gi, '');
     return {
       name: namePart,
@@ -799,7 +798,7 @@ async function extractProfileWithAI(text, fileName) {
       location: '',
       deliveryMode: ['Online'],
       pastDeliveries: [],
-      notes: 'Add Anthropic API key in Settings to enable auto-extraction.'
+      notes: 'Add API key in Settings to enable auto-extraction.'
     };
   }
   const prompt = `Extract trainer profile data from this document. Return JSON only, no markdown:
@@ -820,18 +819,8 @@ async function extractProfileWithAI(text, fileName) {
 Document:
 ${text.substring(0, 8000)}`;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-  const data = await response.json();
-  const text2 = data.content?.find(b => b.type === 'text')?.text || '{}';
-  return JSON.parse(text2.replace(/```json|```/g, '').trim());
+  const text2 = await callAI(prompt);
+  return JSON.parse(text2);
 }
 
 // ─── REVIEW QUEUE ─────────────────────────────────────────────────────────────
@@ -925,10 +914,49 @@ function rejectQueueItem(qId) {
 }
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
+function toggleProviderKey() {
+  const provider = document.getElementById('aiProvider').value;
+  document.getElementById('anthropicKeyField').style.display = provider === 'anthropic' ? 'block' : 'none';
+  document.getElementById('openaiKeyField').style.display = provider === 'openai' ? 'block' : 'none';
+}
+
+async function callAI(prompt) {
+  const provider = state.settings.aiProvider || 'anthropic';
+  if (provider === 'openai') {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${state.settings.openaiKey}` },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      })
+    });
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || '{}';
+  } else {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.find(b => b.type === 'text')?.text || '{}';
+    return text.replace(/```json|```/g, '').trim();
+  }
+}
+
 function saveSettings() {
   state.settings.profileFolderId = document.getElementById('profileFolderId').value.trim();
   state.settings.feedbackFolderId = document.getElementById('feedbackFolderId').value.trim();
   state.settings.anthropicKey = document.getElementById('anthropicKey').value.trim();
+  state.settings.openaiKey = document.getElementById('openaiKey').value.trim();
+  state.settings.aiProvider = document.getElementById('aiProvider').value;
   saveLocal();
   toast('Settings saved!', 'success');
 }
