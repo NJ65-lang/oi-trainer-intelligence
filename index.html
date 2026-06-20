@@ -610,14 +610,22 @@ async function runSearch() {
       feedbackCount: t.feedback?.totalRespondents || 0,
     }));
 
-    const prompt = `You are a trainer matching expert for OI, a corporate L&D company in India.
+    const prompt = `You are a strict trainer matching expert for OI, a corporate L&D company in India.
 
 Requirement: "${query}"
 
 Trainer database:
 ${JSON.stringify(trainerSummary, null, 2)}
 
-Match the requirement against all trainers. Return JSON only:
+STRICT MATCHING RULES:
+1. ONLY return trainers who are genuinely relevant to the requirement. If no one matches, return empty matches array.
+2. If the query is about a specific technology (e.g. Mainframe, Java, Oracle), ONLY return trainers who have that technology in their specializations or pastDeliveries. Do NOT return AI/GenAI trainers for a Mainframe query.
+3. If the query is about experience years (e.g. "30 year exp"), rank by totalExpYears descending and only return those with high experience.
+4. If the query mentions a specific client or industry, prioritize trainers who have delivered to similar clients.
+5. Never suggest a trainer just because they are popular or have good feedback — they must match the actual requirement.
+6. Match score must reflect actual relevance: 90%+ only for exact topic+client match, 70-89% for strong domain match, below 50% means do not include.
+
+Return JSON only, no markdown:
 {
   "matches": [
     {
@@ -635,8 +643,7 @@ Match the requirement against all trainers. Return JSON only:
   ]
 }
 
-Sort by matchScore descending. Include max 4 matches. Only include genuinely suitable trainers.
-Scoring priority: 1) Exact same topic delivered before (highest weight) 2) Corporate training years + client count 3) Feedback score 4) Domain alignment`;
+Sort by matchScore descending. Max 4 matches. If fewer than 4 genuinely match, return fewer. If none match, return {"matches":[]}.`;
 
     const aiResult = await callAI(prompt);
     const result = JSON.parse(aiResult);
@@ -679,7 +686,7 @@ function keywordMatch(query) {
 
 function renderSearchResults(matches, query, area) {
   if (!matches || !matches.length) {
-    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🤔</div><div class="empty-text">No strong matches found</div><div class="empty-sub">Try different keywords or add more trainers</div></div>`;
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No matching trainers found</div><div class="empty-sub">No trainer in the database matches this requirement. Try uploading more profiles or refine your query.</div></div>`;
     return;
   }
   area.innerHTML = `<div class="results-label">Top matches for: "${esc(query)}"</div>`;
