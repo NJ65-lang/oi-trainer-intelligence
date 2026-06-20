@@ -436,9 +436,27 @@ function init() {
 }
 function loadLocal() {
   try { const d = localStorage.getItem('oi_trainer_v1'); if (d) Object.assign(state, JSON.parse(d)); } catch(e) {}
+  // Load API keys from permanent separate storage (never wiped)
+  try {
+    const keys = localStorage.getItem('oi_api_keys');
+    if (keys) {
+      const k = JSON.parse(keys);
+      if (k.anthropicKey) state.settings.anthropicKey = k.anthropicKey;
+      if (k.openaiKey) state.settings.openaiKey = k.openaiKey;
+      if (k.aiProvider) state.settings.aiProvider = k.aiProvider;
+    }
+  } catch(e) {}
 }
 function saveLocal() {
   try { localStorage.setItem('oi_trainer_v1', JSON.stringify(state)); } catch(e) {}
+  // Always save API keys to permanent separate storage
+  try {
+    localStorage.setItem('oi_api_keys', JSON.stringify({
+      anthropicKey: state.settings.anthropicKey || '',
+      openaiKey: state.settings.openaiKey || '',
+      aiProvider: state.settings.aiProvider || 'openai'
+    }));
+  } catch(e) {}
 }
 
 // ─── VIEWS ────────────────────────────────────────────────────────────────────
